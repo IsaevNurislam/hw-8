@@ -7,13 +7,16 @@ import DeleteModal from "../UI/DeleteModal";
 import EditModal from "../UI/EditModal";
 
 const TodoApp = () => {
-  const [todos, setTodos] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedTodoId, setSelectedTodoId] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState(null);
+  // Состояния
+  const [todos, setTodos] = useState([]); // Список задач
+  const [isOpen, setIsOpen] = useState(false); // Флаг открытия модального окна удаления
+  const [selectedTodoId, setSelectedTodoId] = useState(null); // ID выбранной задачи для удаления
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Флаг открытия модального окна редактирования
+  const [selectedTodo, setSelectedTodo] = useState(null); // Выбранная задача для редактирования
 
+  // Эффекты
   useEffect(() => {
+    // Загрузка задач из localStorage при загрузке компонента
     const savedTodos = JSON.parse(localStorage.getItem("todos"));
     if (savedTodos) {
       setTodos(savedTodos);
@@ -21,10 +24,13 @@ const TodoApp = () => {
   }, []);
 
   useEffect(() => {
+    // Сохранение задач в localStorage при изменении списка задач
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  // Функции обработчики
   const addTodoHandler = (text) => {
+    // Добавление новой задачи
     const newTodo = {
       text: text,
       isCompleted: false,
@@ -35,16 +41,19 @@ const TodoApp = () => {
   };
 
   const deleteTodoHandler = (id) => {
+    // Удаление задачи
     setSelectedTodoId(id);
     setIsOpen(true);
   };
 
   const confirmDeleteHandler = () => {
+    // Подтверждение удаления задачи
     setTodos(todos.filter((item) => item.id !== selectedTodoId));
     setIsOpen(false);
   };
 
   const toggleTodoHandler = (id) => {
+    // Переключение статуса задачи (выполнена/не выполнена)
     setTodos(
       todos.map((todo) => {
         if (todo.id === id) {
@@ -60,6 +69,7 @@ const TodoApp = () => {
   };
 
   const editTodoHandler = (id, newText) => {
+    // Редактирование задачи
     setSelectedTodo({
       id: id,
       text: newText,
@@ -68,6 +78,7 @@ const TodoApp = () => {
   };
 
   const updateTodoHandler = (id, newText) => {
+    // Обновление задачи после редактирования
     setTodos(
       todos.map((todo) => {
         if (todo.id === id) {
@@ -84,14 +95,19 @@ const TodoApp = () => {
   };
 
   const resetTodosHandler = () => {
+    // Сброс списка задач
     setTodos([]);
   };
 
   const deleteCompletedTodos = () => {
+    // Удаление завершенных задач
     setTodos(todos.filter((item) => !item.isCompleted));
   };
 
+  // Вычисляемые значения
   const completedTodoCount = todos.filter((item) => item.isCompleted).length;
+
+  // Возвращаемый JSX
   return (
     <div className="App">
       <h1>Todo App</h1>
@@ -112,7 +128,7 @@ const TodoApp = () => {
       {completedTodoCount > 0 && (
         <h2>
           You have completed {completedTodoCount}
-          {completedTodoCount > 1 ? " tasks" : " task"}
+          {completedTodoCount > 1 ? " todos" : " todo"}
         </h2>
       )}
       {isOpen && (
@@ -124,7 +140,7 @@ const TodoApp = () => {
             setIsEditModalOpen(false);
           }}
         >
-          Are you sure you want to delete this task?
+         Are you sure you want to delete this todo?
         </DeleteModal>
       )}
       {isEditModalOpen && (
