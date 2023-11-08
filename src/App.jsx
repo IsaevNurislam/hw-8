@@ -1,13 +1,8 @@
 import React from "react";
-import "./App.css";
-import TodoApp from "./components/todos/TodoApp";
+import OrderFoodApp from "./components/OrderFoodApp";
 
 const App = () => {
-  return (
-    <>
-      <TodoApp />
-    </>
-  );
+  return <OrderFoodApp />;
 };
 
 export default App;
